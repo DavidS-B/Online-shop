@@ -153,8 +153,47 @@ app.post("/category/delete", async (req, res) => {
 /* ==========> PRODUCT <========== */
 /* READ */
 app.get("/product", async (req, res) => {
-  const productTab = await Product.find();
-  res.json(productTab);
+  if (req.query.priceMin) {
+    const productTab = await Product.find({
+      price: { $gte: req.query.priceMin }
+    });
+    res.json(productTab);
+  } else if (req.query.priceMax) {
+    const productTab = await Product.find({
+      price: { $lte: req.query.priceMax }
+    });
+    res.json(productTab);
+  } else if (req.query.priceMin && req.query.priceMax) {
+    const productTab = await Product.find({
+      price: { $gte: req.query.priceMin, $lte: req.query.priceMax }
+    });
+    res.json(productTab);
+  } else if (req.query.category) {
+    const productTab = await Product.find({ _id: req.query.category });
+    res.json(productTab);
+  } else if (req.query.category && req.query.priceMin) {
+    const productTab = await Product.find({
+      _id: req.query.category,
+      $gte: req.query.priceMin
+    });
+    res.json(productTab);
+  } else if (req.query.category && req.query.priceMax) {
+    const productTab = await Product.find({
+      _id: req.query.category,
+      $lte: req.query.priceMax
+    });
+    res.json(productTab);
+  } else if (req.query.category && req.query.priceMin && req.query.priceMax) {
+    const productTab = await Product.find({
+      _id: req.query.category,
+      $gte: req.query.priceMin,
+      $lte: req.query.priceMax
+    });
+    res.json(productTab);
+  } else {
+    const productTab = await Product.find();
+    res.json(productTab);
+  }
 });
 
 /* CREATE */

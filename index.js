@@ -5,7 +5,7 @@ const mongoose = require("mongoose");
 const app = express();
 app.use(bodyParser.json());
 
-mongoose.connect("mongodb://localhost/Online-shop", { useNewUrlParser: true });
+mongoose.connect(mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/Online-shop", { useNewUrlParser: true });
 
 /* ==========> express.Router() <========== */
 const departmentRoutes = require("./routes/department");

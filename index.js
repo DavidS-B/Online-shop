@@ -5,9 +5,13 @@ const mongoose = require("mongoose");
 const app = express();
 app.use(bodyParser.json());
 
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/Online-shop", {
-  useNewUrlParser: true
-});
+mongoose.connect(
+  process.env.MONGODB_URI ||
+    "mongodb://heroku_rst5zh91:6oij7kf9mblj7b3k2k8ie09dc4@ds219879.mlab.com:19879/heroku_rst5zh91",
+  {
+    useNewUrlParser: true
+  }
+);
 
 /* ==========> express.Router() <========== */
 const departmentRoutes = require("./routes/department");

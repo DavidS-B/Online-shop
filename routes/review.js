@@ -3,8 +3,26 @@ const mongoose = require("mongoose");
 const router = express.Router();
 
 const Review = mongoose.model("Review", {
-  score: Number,
-  comment: String,
+  rating: {
+    type: Number,
+    min: 0,
+    max: 5,
+    required: true
+  },
+  comment: {
+    type: String,
+    minlength: 0,
+    maxlength: 150,
+    trim: true,
+    required: true
+  },
+  username: {
+    type: String,
+    minlength: 3,
+    maxlength: 15,
+    trim: true,
+    required: true
+  },
   product: { type: mongoose.Schema.Types.ObjectId, ref: "Product" }
 });
 
@@ -19,11 +37,11 @@ router.get("/review", async (req, res) => {
 
 /* CREATE */
 router.post("/review/create", async (req, res) => {
-  if (req.query.title && req.body.score && req.body.comment) {
+  if (req.query.title && req.body.rating && req.body.comment) {
     try {
       const prod = await Product.findOne({ title: req.query.title });
       const newReview = new Review({
-        score: req.body.score,
+        rating: req.body.rating,
         comment: req.body.comment,
         product: prod
       });
@@ -42,12 +60,12 @@ router.post("/product/update", async (req, res) => {
   try {
     if (
       req.query.id &&
-      req.body.score &&
+      req.body.rating &&
       req.body.comment &&
       req.body.product
     ) {
       const target = await Review.findOne({ _id: req.query.id });
-      target.score = req.body.score;
+      target.rating = req.body.rating;
       target.comment = req.body.comment;
       target.product = req.body.product;
       await target.save();
